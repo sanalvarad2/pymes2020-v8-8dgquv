@@ -1,0 +1,110 @@
+<h1>{{Titulo}} <small>{{TituloAccionABMC[AccionABMC]}}</small></h1>
+
+<div class="container">
+  <button type="button" class="btn btn-primary" (click)="Agregar()">
+    <span class="fas fa-plus"> </span>
+    ALTA
+    </button>
+    <br>
+</div>
+
+<div class='container listado' *ngIf="AccionABMC == 'L' ">
+  <table class='table' *ngIf="Lista.length">
+    <thead>
+      <th>Nombre</th>
+      <th>Ranking</th>
+      <th>Id</th>
+      <th>Acciones</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let obj of Lista">
+        <td>{{obj.EquipoNombre}}</td>
+        <td>{{obj.EquipoRanking}}</td>
+        <td>{{obj.IdEquipo}}</td>
+        <td>
+          <button type="button" class="btn btn-sm btn-outline-primary" title="Ver" (click)="Consultar(obj)">
+                    <span class="fas fa-eye"></span>
+                </button>
+					<button type="button" class="btn btn-sm btn-outline-primary" title="Modificar" (click)="Editar(obj)">
+                    <span class="fas fa-pencil-alt"></span>
+                </button>
+					
+        </td>
+      </tr>
+    </tbody>  
+  </table>
+  <div id="divPaginador" class="col-sm-12">
+		<div class="row bg-light">
+			<div class="col-sm-3">
+				<span class="label label-default font-weight-bold">Registros: {{RegistrosTotal}}</span>
+			</div>
+			<div class="col-sm-6 text-center">
+				<ngb-pagination [(page)]="Pagina" (pageChange)="getEquipos()" [pageSize]="10" [maxSize]="10"
+					[collectionSize]="RegistrosTotal"></ngb-pagination>
+			</div>		
+		</div>
+	</div>
+</div>
+
+<div class='container-fluid form' *ngIf="AccionABMC != 'L' ">
+  <form name="FormReg" [formGroup]='FormReg'  class="bg-light">
+
+	<fieldset [disabled]="AccionABMC==='C'">
+		<!--campo nombre-->
+		<div class="form-group row">
+			<label class="col-form-label col-sm-2 col-sm-offset-2" for="EquipoNombre">Nombre <span
+                    class="text-danger">*</span></label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" formControlName="EquipoNombre" 
+         [ngClass]="{'is-invalid': (FormReg.controls.EquipoNombre.touched || submitted)  
+            && FormReg.controls.EquipoNombre.errors}" />
+
+				<span class="text-danger" *ngIf="(FormReg.controls.EquipoNombre.touched || submitted) 
+                        && FormReg.controls.EquipoNombre.errors?.required">
+                    Dato requerido.
+                </span>
+                                
+			</div>
+		</div>
+    <div class="form-group row">
+			<label class="col-form-label col-sm-2 col-sm-offset-2" for="EquipoRanking">Ranking <span
+                    class="text-danger">*</span></label>
+			<div class="col-sm-6">
+				<input type="text" class="form-control" formControlName="EquipoRanking" 
+         [ngClass]="{'is-invalid': (FormReg.controls.EquipoRanking.touched || submitted)  
+            && FormReg.controls.EquipoRanking.errors}" />
+
+				<span class="text-danger" *ngIf="(FormReg.controls.EquipoRanking.touched || submitted) 
+                        && FormReg.controls.EquipoRanking.errors?.required">
+                    Dato requerido.
+                </span>
+                                
+			</div>
+		</div>
+
+    <div class="form-group row">
+			<label class="col-form-label col-sm-2 col-sm-offset-2" for="IdEquipo">Id <span
+                    class="text-danger">*</span></label>
+			<div class="col-sm-6">
+				<input [attr.disabled]="AccionABMC === 'A' || 'M' ? '' : null" type="text" class="form-control" formControlName="IdEquipo" 
+         [ngClass]="{'is-invalid': (FormReg.controls.IdEquipo.touched || submitted)  
+            && FormReg.controls.IdEquipo.errors}" />
+
+				
+                                
+			</div>
+		</div>
+
+	</fieldset>
+
+  <div class="row justify-content-center">
+		<button type="button" *ngIf="AccionABMC!=='C'" class="btn btn-primary" (click)="Grabar()">
+            <span class="fas fa-check"></span> Grabar
+        </button>
+		&nbsp;
+		<button type="button" class="btn btn-warning" (click)="Volver()">
+            <span class="fas fa-undo"></span> {{AccionABMC=='C' ? 'Volver' : 'Cancelar'}}
+        </button>
+	</div>
+  </form>
+</div>
